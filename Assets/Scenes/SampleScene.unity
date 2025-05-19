@@ -12069,10 +12069,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20061c95d96e25f439773139bb4d8cfe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  runSpeed: 8
-  cameraTransform: {fileID: 972143098}
-  mouseSensitivity: 2
+  walkSpeed: 9
+  runSpeed: 14
+  crouchSpeed: 5
+  crouchHeight: 1
+  standHeight: 2
+  jumpForce: 7
+  gravity: 20
+  mouseSensitivity: 100
+  minVerticalAngle: -80
+  maxVerticalAngle: 80
 --- !u!143 &776278529
 CharacterController:
   m_ObjectHideFlags: 0
@@ -12092,12 +12098,12 @@ CharacterController:
   m_Enabled: 1
   serializedVersion: 3
   m_Height: 2
-  m_Radius: 0.5
+  m_Radius: 0.4
   m_SlopeLimit: 45
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &776880408
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -15835,11 +15841,6 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4895497590064792, guid: 288b229db858c114299d1bf70ffc95cd, type: 3}
   m_PrefabInstance: {fileID: 991656867}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &972143098 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 3937484726984528189, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
-  m_PrefabInstance: {fileID: 1836087305}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &972313181 stripped
 Transform:
@@ -29240,37 +29241,57 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerNovo
       objectReference: {fileID: 0}
+    - target: {fileID: 1600247537527589250, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
+      propertyPath: field of view
+      value: 25.114996
+      objectReference: {fileID: 0}
+    - target: {fileID: 1600247537527589250, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
+      propertyPath: m_FOVAxisMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1600247537527589250, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
+      propertyPath: m_FocalLength
+      value: 136.83583
+      objectReference: {fileID: 0}
+    - target: {fileID: 3937484726984528189, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3937484726984528189, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.12
       objectReference: {fileID: 0}
     - target: {fileID: 3937484726984528189, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.02
+      value: 1.42
       objectReference: {fileID: 0}
     - target: {fileID: 3937484726984528189, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.84
+      value: -10.21
+      objectReference: {fileID: 0}
+    - target: {fileID: 3937484726984528189, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3937484726984528189, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3937484726984528189, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.018962298
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 3937484726984528189, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.9998202
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3937484726984528189, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -2.173
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3937484726984528189, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 180
+      value: 360
       objectReference: {fileID: 0}
     - target: {fileID: 4950443092344124587, guid: ff9d2db70b787f5449f0dce8f04302db, type: 3}
       propertyPath: m_LocalPosition.x

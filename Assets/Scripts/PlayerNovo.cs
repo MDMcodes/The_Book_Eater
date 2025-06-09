@@ -32,11 +32,9 @@ public class PlayerController : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         cameraTransform = Camera.main.transform;
 
-        // Lock cursor and make it invisible
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
-        // Set initial speed
         currentSpeed = walkSpeed;
     }
 
@@ -48,14 +46,18 @@ public class PlayerController : MonoBehaviour
         HandleRunning();
         UpdateAnimator();
     }
-
-    void HandleCameraRotation()
+    void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        // Mouse X rotation (left/right)
+        if (hit.gameObject.CompareTag("enemy"))
+        {
+            Debug.Log("Player colidiu com inimigo!");
+        }
+    }
+        void HandleCameraRotation()
+    {
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         transform.Rotate(Vector3.up * mouseX);
 
-        // Mouse Y rotation (up/down)
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
         verticalRotation -= mouseY;
         verticalRotation = Mathf.Clamp(verticalRotation, minVerticalAngle, maxVerticalAngle);
@@ -66,27 +68,22 @@ public class PlayerController : MonoBehaviour
     {
         isGrounded = characterController.isGrounded;
 
-        // Reset y velocity when grounded
         if (isGrounded && moveDirection.y < 0)
         {
-            moveDirection.y = -2f; // Small force to keep player grounded
+            moveDirection.y = -2f;
         }
 
-        // Get input axes
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
-        // Calculate movement direction
         Vector3 move = transform.right * horizontal + transform.forward * vertical;
         characterController.Move(move * currentSpeed * Time.deltaTime);
 
-        // Jump if grounded and pressed jump button
         if (isGrounded && Input.GetButtonDown("Jump") && !isCrouching)
         {
             moveDirection.y = jumpForce;
         }
 
-        // Apply gravity
         moveDirection.y -= gravity * Time.deltaTime;
         characterController.Move(moveDirection * Time.deltaTime);
     }
@@ -97,23 +94,21 @@ public class PlayerController : MonoBehaviour
         {
             isCrouching = true;
             characterController.height = crouchHeight;
-            characterController.center = new Vector3(0, crouchHeight / 2, 0); // Ajusta o centro
+            characterController.center = new Vector3(0, crouchHeight / 2, 0);
             currentSpeed = crouchSpeed;
         }
         else if (Input.GetKeyUp(KeyCode.LeftControl))
         {
-            // Verifica espaço acima com SphereCast para ser mais preciso
             float raycastRadius = characterController.radius * 0.9f;
-            float raycastDistance = standHeight - crouchHeight + 0.1f; // Margem de segurança
+            float raycastDistance = standHeight - crouchHeight + 0.1f;
 
             if (!Physics.SphereCast(transform.position, raycastRadius, Vector3.up, out _, raycastDistance))
             {
                 isCrouching = false;
                 characterController.height = standHeight;
-                characterController.center = new Vector3(0, standHeight / 2, 0); // Recentraliza
+                characterController.center = new Vector3(0, standHeight / 2, 0);
                 currentSpeed = isRunning ? runSpeed : walkSpeed;
             }
-            // Se não houver espaço, mantém agachado
         }
     }
 
@@ -133,36 +128,34 @@ public class PlayerController : MonoBehaviour
 
     void UpdateAnimator()
     {
-        int transitionState = 0; // Default to idle
+        int transitionState = 0;
 
-        // Only set movement states if grounded
         if (isGrounded)
         {
-            // Get movement magnitude (0 when not moving)
             float moveMagnitude = new Vector3(
                 Input.GetAxis("Horizontal"),
                 0,
                 Input.GetAxis("Vertical")
             ).magnitude;
 
-            if (moveMagnitude > 0.1f) // If moving
+            if (moveMagnitude > 0.1f)
             {
                 if (isCrouching)
                 {
-                    transitionState = 4; // Walking while crouched
+                    transitionState = 4;
                 }
                 else if (isRunning)
                 {
-                    transitionState = 2; // Running
+                    transitionState = 2;
                 }
                 else
                 {
-                    transitionState = 1; // Walking
+                    transitionState = 1;
                 }
             }
             else if (isCrouching)
             {
-                transitionState = 3; // Crouched idle
+                transitionState = 3;
             }
         }
 

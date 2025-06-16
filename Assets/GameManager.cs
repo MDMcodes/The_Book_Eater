@@ -23,7 +23,6 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        // Singleton pattern
         if (Instance == null)
         {
             Instance = this;
@@ -44,7 +43,6 @@ public class GameManager : MonoBehaviour
     {
         if (jogadorRespondendo) return;
 
-        // Verificações de segurança
         if (canvasPergunta == null)
         {
             Debug.LogError("Canvas da pergunta não está conectado no GameManager!");
@@ -66,18 +64,14 @@ public class GameManager : MonoBehaviour
         perguntaAtual = new PerguntaAtual(pergunta, livroScript);
         jogadorRespondendo = true;
 
-        // Pausar o jogo e liberar cursor
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
-        // Ativar canvas
         canvasPergunta.SetActive(true);
 
-        // Configurar pergunta
         textoPergunta.text = pergunta.pergunta;
 
-        // Configurar botões de resposta
         for (int i = 0; i < botoesResposta.Length && i < pergunta.respostas.Length; i++)
         {
             if (botoesResposta[i] != null)
@@ -90,14 +84,12 @@ public class GameManager : MonoBehaviour
                     textoButton.text = pergunta.respostas[i];
                 }
 
-                // Remover listeners antigos e adicionar novo
                 int indiceResposta = i;
                 botoesResposta[i].onClick.RemoveAllListeners();
                 botoesResposta[i].onClick.AddListener(() => ResponderPergunta(indiceResposta));
             }
         }
 
-        // Desativar botões extras se houver menos de 4 respostas
         for (int i = pergunta.respostas.Length; i < botoesResposta.Length; i++)
         {
             if (botoesResposta[i] != null)
@@ -118,17 +110,15 @@ public class GameManager : MonoBehaviour
             Debug.Log("Resposta correta!");
             perguntasCorretas++;
 
-            // Marcar o livro como resolvido usando interface
             if (perguntaAtual.livroOrigem != null && perguntaAtual.livroOrigem is ILivroInterativo)
             {
                 ((ILivroInterativo)perguntaAtual.livroOrigem).MarcarComoResolvido();
             }
 
-            // Verificar se completou o jogo
             if (perguntasCorretas >= totalPerguntas)
             {
                 Debug.Log("Jogo completado!");
-                VoltarMenuInicial();
+                VoltarMenuVitoria();
                 return;
             }
         }
@@ -137,11 +127,10 @@ public class GameManager : MonoBehaviour
             Debug.Log("Resposta incorreta!");
             vidasRestantes--;
 
-            // Verificar se perdeu todas as vidas
             if (vidasRestantes <= 0)
             {
                 Debug.Log("Game Over!");
-                VoltarMenuInicial();
+                VoltarMenuDerrota();
                 return;
             }
         }
@@ -154,13 +143,7 @@ public class GameManager : MonoBehaviour
     {
         canvasPergunta.SetActive(false);
         jogadorRespondendo = false;
-
-        // Despausar o jogo e restaurar cursor (se necessário)
         Time.timeScale = 1f;
-
-        // Se seu jogo usa cursor travado, descomente as linhas abaixo:
-        // Cursor.lockState = CursorLockMode.Locked;
-        // Cursor.visible = false;
     }
 
     void AtualizarUI()
@@ -176,10 +159,15 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("TextoProgresso não está conectado no GameManager!");
     }
 
-    void VoltarMenuInicial()
+    void VoltarMenuVitoria()
     {
-        Time.timeScale = 1f; // Garantir que o tempo volte ao normal
-        SceneManager.LoadScene(0); // Assumindo que o menu inicial é a primeira cena
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(2);
+    }
+    void VoltarMenuDerrota()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(0);
     }
 }
 
@@ -188,7 +176,7 @@ public class PerguntaData
 {
     public string pergunta;
     public string[] respostas;
-    public int respostaCorreta; // Índice da resposta correta (0-3)
+    public int respostaCorreta;
 }
 
 public class PerguntaAtual

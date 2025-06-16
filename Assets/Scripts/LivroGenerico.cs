@@ -34,14 +34,10 @@ public class LivroGenerico : MonoBehaviour, ILivroInterativo
         {
             corOriginal = rendererLivro.material.color;
         }
-
-        // Se não configurou pergunta no inspector, usar pergunta padrão
         if (string.IsNullOrEmpty(perguntaDoLivro.pergunta))
         {
             ConfigurarPerguntaPadrao();
         }
-
-        // Definir cor baseada na matéria
         DefinirCorPorMateria();
     }
 
